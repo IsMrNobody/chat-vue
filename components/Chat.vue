@@ -1,7 +1,8 @@
 <template>
   <v-row v-resize="onResize">
-    <v-col v-if="mostrarLista" cols sm="4">
-      <v-card>
+    <v-col cols sm="4">
+      <Perfil :usuario="usuario" />
+      <v-card v-if="mostrarLista">
         <v-toolbar color="primary">
           <v-toolbar-title dark dense>
             contatos
@@ -35,7 +36,7 @@
     </v-col>
     <v-col v-if="mostrarChat">
       <v-container class="pa-0 ma-0">
-        <v-col class="mar" align="end">
+        <v-col class="pa-0 ma-0">
           <v-col>
             <v-card color="#363636">
               <v-toolbar color="primary">
@@ -61,13 +62,14 @@
                     cols="8"
                     :offset-sm="5 & (item.uid == usuario.uid)"
                   >
-                    <v-row>
+                    <v-row justify="center">
                       <div class="chat-fecha">
                         {{ convertirFecha(item.fechaEnvio) }}
                       </div>
                       <v-card
-                        :color="item.uid != usuario.uid ? '#092532' : '#84a9ac'"
-                        class="chat-mensaje"
+                        :color="item.uid != usuario.uid ? '#092532' : ''"
+                        outlined
+                        class="text-justify"
                       >
                         <v-card-text>
                           <div>{{ item.texto }}</div>
@@ -98,9 +100,13 @@
 </template>
 
 <script>
+import Perfil from '@/components/Perfil'
 import { db } from '@/plugins/firebase'
 import uuid from 'uuid/dist/v4'
 export default {
+  components: {
+    Perfil,
+  },
   props: ['usuario'],
   data() {
     return {
@@ -130,7 +136,7 @@ export default {
   },
   methods: {
     onResize() {
-      this.height = window.innerHeight - 320
+      this.height = window.innerHeight - 420
     },
     convertirFecha(timeStamp) {
       return timeStamp.toDate().toISOString().substring(0, 16).replace('T', ' ')
@@ -175,7 +181,7 @@ export default {
                 this.chat.push(mensaje)
 
                 if (
-                  !mensaje.fechaEnvio &&
+                  !mensaje.fechaRecibido &&
                   mensaje.uid !== this.usuario.uid
                 ) {
                   this.marcarMensajeLeido(mensaje)
@@ -202,7 +208,7 @@ export default {
           .doc(this.cid)
           .collection('chat')
           .doc(mensaje.mid),
-        { fechaEnvio: new Date() }
+        { fechaRecibido: new Date() }
       )
       batch.delete(
         db
@@ -340,7 +346,7 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
 }
-.mar {
-  /* margin-top: 50px; */
-}
+/* .mar {
+  margin-top: 50px;
+} */
 </style>

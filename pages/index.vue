@@ -1,14 +1,14 @@
 <template>
   <v-container fluid fill-height>
     <v-col v-if="usuario">
-      <v-row justify="center">
+      <!-- <v-row justify="center">
         <v-avatar size="140" elevation-10>
           <v-img :src="usuario.foto"></v-img>
         </v-avatar>
       </v-row>
       <v-row justify="center">
         <span>{{ usuario.nombre }}</span>
-      </v-row>
+      </v-row> -->
       <v-row justify="center">
         <v-btn class="mt-4" text small color="primary" @click="usuario = null"
           >salir</v-btn
