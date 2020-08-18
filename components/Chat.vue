@@ -175,7 +175,7 @@ export default {
                 this.chat.push(mensaje)
 
                 if (
-                  !mensaje.fechaRecibido &&
+                  !mensaje.fechaEnvio &&
                   mensaje.uid !== this.usuario.uid
                 ) {
                   this.marcarMensajeLeido(mensaje)
@@ -202,7 +202,7 @@ export default {
           .doc(this.cid)
           .collection('chat')
           .doc(mensaje.mid),
-        { fechaRecibido: new Date() }
+        { fechaEnvio: new Date() }
       )
       batch.delete(
         db
